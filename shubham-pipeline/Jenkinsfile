@@ -21,24 +21,31 @@ pipeline {
         }
     }
 
-        stage('Starting Deployment') {
+        stage('Starting Build and Deployment') {
           steps {
             sh '''
                  oc project $DEPLOY_PROJECT
-                 oc new-app --name from-jenkins --code https://github.com/shkatara/sunny-do288-repo
+                 oc new-app --name jenkins-build-app --code https://github.com/shkatara/sunny-do288-repo
                '''
 
           }
         } 
 
-        stage('Prompt for a route..') {
+        stage('Prompt for Route.') {
           steps {
              input message: "Create a route ?"
              sh '''
                 oc project $DEPLOY_PROJECT
-                oc expose svc from-jenkins
+                oc expose svc jenkins-build-app
                 '''
           }
         }
+        
+        stage('All Done'){
+          steps {
+             sh ' echo Your Pipeline is finished executing. Access your application from the jenkins-build-app route in jenkins-deploy project.'
+          }
+       }
+
      }
 } 

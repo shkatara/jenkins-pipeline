@@ -23,23 +23,34 @@ For installing CRC Openshift 4 on your laptop, follow the following:
 
 Things you should have after following the steps.
 --------------------
-1. Access to a couple of projects
+1. To get it working, you will need to setup your environment.
 
+Once you have the required Openshift cluster setup by CRC or some other ways, create the project and deploy Jenkins-ephemeral from the template.
 
-2. A working Jenkins server
+shub ocp4.2 ~/sample-pipeline % oc new-project jenkins-ci-cd
+shub ocp4.2 ~/sample-pipeline % oc new-app --name jenkins jenkins-ephemeral
 
-Releasing
-------------
-Finished with your project?
+Having the Jenkins server running, you need to create the project which Jenkins will ues to deploy applications on. Usually this could be the same project where Jenkins is running, but it is a common approach to have one Jenkins server running and sharing it between multiple projects, such as dev projects.
 
-- Create a feature branch as normal.
-- Update the version history in the README.md file
-- Update this to develop as normal.
+shub ocp4.2 ~/sample-pipeline % oc new-project jenkins-deploy
 
-		git checkout master
-		git merge --no-ff develop
-		git push origin master
-		git tag v1.0.0
-		git push origin v1.0.0
+Because Jenkins is running in a different project and it will build and deploy applications in a different project, you will need to give at least edit access to the jenkins serviceaccount to your new jenkins-deploy project. 
 
-Replace 1.0.0 in the snippet here with your appropriate versions. Now you have a tag saved.
+shub ocp4.2 ~/sample-pipeline % oc policy add-role-to-user edit system:serviceaccount:jenkins-ci-cd:jenkins 
+
+2. In the jenkins-ci-cd project, there is a route created for the Jenkins server, use that to open Jenkins. As this is running on Openshift, you can use the same credentials to login as your own openshift cluster, thanks to the Openshift Login Plugin. 
+
+Login using your credentials and go to Manage Jenkins ( on the left side ) ---> Configure System.
+
+Find the "OpenShift Jenkins Sync" project and just add the project you made in the "Namespace" field. Make sure you do not remove the existing project name. Use a whitespace as a delimiter. Do not change anything else unless you know what you are doing. Hit save. 
+
+3. Now you will need to start a new build using the Jenkinsfile given in the git repository.
+
+shub ocp4.2 ~/sample-pipeline % oc project jenkins-deploy
+shub ocp4.2 ~/sample-pipeline % oc new-app --name from-jenkinsfile --code https://github.com/shkatara/jenkins-pipeline --context-dir shubham-pipeline
+
+In some time, you should see a build starting in Openshift / Jenkins. If not, manually start it, 
+
+shub ocp4.2 ~/sample-pipeline % oc start-build from-jenkinsfile
+
+4. Look at the build, it will start the pipeline and the pipeline will then start the building and prompt for the inputs for creating the route for the built application. Approve it and your application should be ready in the jenkins-deploy project. 
