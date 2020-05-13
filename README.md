@@ -55,5 +55,5 @@ In some time, you should see a build starting in Openshift / Jenkins. If not, ma
 
 4. Look at the build, it will start the pipeline and the pipeline will then start the building and prompt for the inputs for creating the route for the built application. Approve it and your application should be ready in the jenkins-deploy project. 
 
-##Note: This might take some time because the pipeline does not wait for the build to finish, but just moves on and gives a prompt and creates a route. It that happens, the route will give a standard Openshift 404. Wait for some time, let the application build ( or even check for the builds yourself ) and once it says complete, you can access your application.
+##Note: This might take some time because the pipeline does not wait for the build to finish, but just moves on and gives a prompt and creates a route. If that happens, the route will give a standard Openshift 404. Wait for some time, let the application build ( or even check for the builds yourself ) and once it says complete, you can access your application.
 
