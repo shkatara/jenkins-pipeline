@@ -28,15 +28,15 @@ Things you should have after following the steps.
 Once you have the required Openshift cluster setup by CRC or some other ways, create the project and deploy Jenkins-ephemeral from the template.
 
 > shub ocp4.2 ~/sample-pipeline % oc new-project jenkins-ci-cd  \
-> | shub ocp4.2 ~/sample-pipeline % oc new-app --name jenkins jenkins-ephemeral
+> shub ocp4.2 ~/sample-pipeline % oc new-app --name jenkins jenkins-ephemeral
 
 Having the Jenkins server running, you need to create the project which Jenkins will ues to deploy applications on. Usually this could be the same project where Jenkins is running, but it is a common approach to have one Jenkins server running and sharing it between multiple projects, such as dev projects.
 
-shub ocp4.2 ~/sample-pipeline % oc new-project jenkins-deploy
+> shub ocp4.2 ~/sample-pipeline % oc new-project jenkins-deploy
 
 Because Jenkins is running in a different project and it will build and deploy applications in a different project, you will need to give at least edit access to the jenkins serviceaccount to your new jenkins-deploy project. 
 
-shub ocp4.2 ~/sample-pipeline % oc policy add-role-to-user edit system:serviceaccount:jenkins-ci-cd:jenkins 
+> shub ocp4.2 ~/sample-pipeline % oc policy add-role-to-user edit system:serviceaccount:jenkins-ci-cd:jenkins 
 
 2. In the jenkins-ci-cd project, there is a route created for the Jenkins server, use that to open Jenkins. As this is running on Openshift, you can use the same credentials to login as your own openshift cluster, thanks to the Openshift Login Plugin. 
 
@@ -46,8 +46,8 @@ Find the "OpenShift Jenkins Sync" project and just add the project you made in t
 
 3. Now you will need to start a new build using the Jenkinsfile given in the git repository.
 
-shub ocp4.2 ~/sample-pipeline % oc project jenkins-deploy
-shub ocp4.2 ~/sample-pipeline % oc new-app --name from-jenkinsfile --code https://github.com/shkatara/jenkins-pipeline --context-dir shubham-pipeline
+> shub ocp4.2 ~/sample-pipeline % oc project jenkins-deploy \
+> shub ocp4.2 ~/sample-pipeline % oc new-app --name from-jenkinsfile --code https://github.com/shkatara/jenkins-pipeline --context-dir shubham-pipeline
 
 In some time, you should see a build starting in Openshift / Jenkins. If not, manually start it, 
 
