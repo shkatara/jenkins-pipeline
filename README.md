@@ -30,7 +30,7 @@ Once you have the required Openshift cluster setup by CRC or some other ways, cr
 > shub ocp4.2 ~/sample-pipeline % oc new-project jenkins-ci-cd  \
 > shub ocp4.2 ~/sample-pipeline % oc new-app --name jenkins jenkins-ephemeral
 
-Having the Jenkins server running, you need to create the project which Jenkins will ues to deploy applications on. Usually this could be the same project where Jenkins is running, but it is a common approach to have one Jenkins server running and sharing it between multiple projects, such as dev projects.
+Having the Jenkins server running, you need to create the project which Jenkins will use to deploy applications on. Usually this could be the same project where Jenkins is running, but it is a common approach to have one Jenkins server running and sharing it between multiple projects, such as dev projects.
 
 > shub ocp4.2 ~/sample-pipeline % oc new-project jenkins-deploy
 
