@@ -51,6 +51,6 @@ Find the "OpenShift Jenkins Sync" project and just add the project you made in t
 
 In some time, you should see a build starting in Openshift / Jenkins. If not, manually start it, 
 
-shub ocp4.2 ~/sample-pipeline % oc start-build from-jenkinsfile
+> shub ocp4.2 ~/sample-pipeline % oc start-build from-jenkinsfile
 
 4. Look at the build, it will start the pipeline and the pipeline will then start the building and prompt for the inputs for creating the route for the built application. Approve it and your application should be ready in the jenkins-deploy project. 
