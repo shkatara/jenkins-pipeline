@@ -1,0 +1,44 @@
+pipeline {
+    options {
+        // set a timeout of 30 minutes for this pipeline
+        timeout(time: 30, unit: 'MINUTES')
+    }
+    agent {
+      node {
+             label 'master'
+      }
+    }
+    environment {
+    DEPLOY_PROJECT = "jenkins-deploy"
+    }
+
+    stages {
+
+
+        stage('Use SH to print something'){
+          steps {
+             sh ' echo hello galav, this is the 2nd stage'
+        }
+    }
+
+        stage('Do everything here') {
+          steps {
+            sh '''
+                 oc project $DEPLOY_PROJECT
+                 oc new-app --name from-jenkins --code https://github.com/shkatara/sunny-do288-repo
+               '''
+
+          }
+        } 
+
+        stage('Prompt for Input') {
+          steps {
+             input message: "Create a route ?"
+             sh '''
+                oc project $DEPLOY_PROJECT
+                oc expose svc from-jenkins
+                '''
+          }
+        }
+     }
+} 
